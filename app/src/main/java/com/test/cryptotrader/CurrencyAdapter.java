@@ -12,19 +12,22 @@ import java.util.Arrays;
 
 public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.CurrencyViewHolder> {
 
-    private ArrayList<String> mCurrencyList;
+
+    private ArrayList<Float> mCoinList;
 
     public CurrencyAdapter(){
-        mCurrencyList = new ArrayList<String>(Arrays.asList("Bitcoin","Ethereum","XRP","Bitcoin Cash","Litecoin","EOS","Binance Coin","Stellar","Cardano","Tether","TRON","Bitcoin SV","Drash","Monero","IOTA","NEO","Ontology","Maker","Tezos","NEM"));
+
+        mCoinList = new ArrayList<>();
     }
-    public void addCoin(String coin){
-        mCurrencyList.add(coin);
+    public void addCoin(float coin){
+
+        mCoinList.add(coin);
         notifyDataSetChanged();
     }
 
     @Override
     public int getItemCount(){
-        return  mCurrencyList.size();
+        return  mCoinList.size();
     }
 
     @NonNull
@@ -36,7 +39,8 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
     }
     @Override
     public void onBindViewHolder(@NonNull CurrencyViewHolder currencyViewHolder, int i){
-        String coin = mCurrencyList.get(i);
+//        String coin = mCurrencyList.get(i);
+        float coin = mCoinList.get(i);
         currencyViewHolder.bind(coin);
     }
     class CurrencyViewHolder extends RecyclerView.ViewHolder{
@@ -47,8 +51,8 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
             mCoinTV = itemView.findViewById(R.id.tv_coin_text);
         }
 
-        public void bind(String coin){
-            mCoinTV.setText(coin);
+        public void bind(float coin){
+            mCoinTV.setText(Float.toString(coin));
         }
     }
 }
