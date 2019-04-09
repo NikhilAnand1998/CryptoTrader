@@ -1,11 +1,14 @@
 package com.test.cryptotrader;
 
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -42,10 +45,23 @@ public class CurrencyDisplayActivity extends AppCompatActivity {
 
         mCurrencyAdapter = new CurrencyAdapter();
         mCoinListRV.setAdapter(mCurrencyAdapter);
-
+        mCoinListRV.setItemAnimator(new DefaultItemAnimator());
         mCoinListRV.addItemDecoration(new DividerItemDecoration(mCoinListRV.getContext(),DividerItemDecoration.VERTICAL));
         DefaultCoins();
 
+        ItemTouchHelper.SimpleCallback itemTouchCallback = new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder viewHolder1) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+                ((CurrencyAdapter.CurrencyViewHolder)viewHolder).removeCoin();
+            }
+        };
+    ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchCallback);
+    itemTouchHelper.attachToRecyclerView(mCoinListRV);
 
     }
 

@@ -37,6 +37,7 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
     public int getItemCount(){
         return  items.size();
     }
+    
 
     @NonNull
     @Override
@@ -96,6 +97,12 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
             mSevenDays = itemView.findViewById(R.id.tv_7_days);
         }
 
+
+        public void removeCoin(){
+            int position = getAdapterPosition();
+            items.remove(position);
+            notifyItemRemoved(position);
+        }
 
     }
 }
