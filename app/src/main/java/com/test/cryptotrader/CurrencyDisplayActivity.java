@@ -1,5 +1,6 @@
 package com.test.cryptotrader;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +11,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -23,7 +26,7 @@ public class CurrencyDisplayActivity extends AppCompatActivity {
 
     private static final String TAG = CurrencyDisplayActivity.class.getSimpleName();
         private RecyclerView mCoinListRV;
-        private CurrencyAdapter mCurrencyAdapter;
+        public static CurrencyAdapter mCurrencyAdapter;
         private TextView mLoadingErrorTV;
         private ProgressBar mLoadingPB;
         private ArrayList<CoinUtils.CoinModel> model = new ArrayList<>();
@@ -34,7 +37,7 @@ public class CurrencyDisplayActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_currency_display);
-
+        model = null;
         mCoinListRV = findViewById(R.id.rv_currency_list);
         mCurrencyAdapter = new CurrencyAdapter();
         mLoadingErrorTV = findViewById(R.id.tv_loading_error);
@@ -70,7 +73,32 @@ public class CurrencyDisplayActivity extends AppCompatActivity {
 //        Log.d(TAG,"querying price for: " + coin_code + " at URL: "+ url);
         new APICoinTask().execute(url);
     }
-    class APICoinTask extends AsyncTask<String, Void, String>{
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.crypto_display_menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch(item.getItemId()){
+            case R.id.new_coin_button:
+                addCoinScreen();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void addCoinScreen(){
+        Intent intent = new Intent(this,AddCoin.class );
+        startActivity(intent);
+    }
+
+    public  class APICoinTask extends AsyncTask<String, Void, String>{
+
         @Override
         protected void onPreExecute(){
             super.onPreExecute();

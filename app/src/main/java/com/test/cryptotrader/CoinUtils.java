@@ -98,11 +98,14 @@ public class CoinUtils {
         return ("https://api.coinmarketcap.com/v1/ticker/?limit=10");
 
     }
+    public static String addCoinUrl(String id){
+        String url = "https://api.coinmarketcap.com/v1/ticker/" + id;
+        return url;
+    }
 
     public static ArrayList<CoinModel> parseApiCallResults(String json){
         Gson gson = new Gson();
 
-//        ArrayList<CoinModel> results = gson.fromJson(json,CoinModel.class);
         ArrayList<CoinModel> results = gson.fromJson(json, new TypeToken<ArrayList<CoinModel>>(){}.getType());
         if(results != null ){
             return results;
@@ -111,5 +114,18 @@ public class CoinUtils {
             return null;
         }
     }
+    public static CoinModel parseSingleApiCallResults(String json){
+        Gson gson = new Gson();
+
+        ArrayList<CoinModel> results = gson.fromJson(json, new TypeToken<ArrayList<CoinModel>>(){}.getType());
+        CoinModel item = results.get(0);
+        if(item != null ){
+            return item;
+        }
+        else{
+            return null;
+        }
+    }
+
 }
 

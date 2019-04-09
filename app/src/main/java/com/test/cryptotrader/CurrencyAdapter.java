@@ -24,12 +24,14 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
         items = new ArrayList<>();
     }
     public void updateCoin(ArrayList<CoinUtils.CoinModel> model){
-
         this.items = model;
         notifyDataSetChanged();
+        System.out.println("The item count is: " + getItemCount());
     }
+
     public void addCoin(CoinUtils.CoinModel model){
         items.add(model);
+        System.out.println("The item count is: " + getItemCount());
         notifyDataSetChanged();
     }
 
@@ -37,7 +39,7 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
     public int getItemCount(){
         return  items.size();
     }
-    
+
 
     @NonNull
     @Override
