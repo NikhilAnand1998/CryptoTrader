@@ -3,6 +3,7 @@ package com.test.cryptotrader;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -11,6 +12,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 
 public class CurrencyDisplayActivity extends AppCompatActivity {
@@ -20,7 +23,8 @@ public class CurrencyDisplayActivity extends AppCompatActivity {
         private CurrencyAdapter mCurrencyAdapter;
         private TextView mLoadingErrorTV;
         private ProgressBar mLoadingPB;
-        private float newPrice;
+        private ArrayList<CoinUtils.CoinModel> model = new ArrayList<>();
+
 
 
     @Override
@@ -39,17 +43,15 @@ public class CurrencyDisplayActivity extends AppCompatActivity {
         mCurrencyAdapter = new CurrencyAdapter();
         mCoinListRV.setAdapter(mCurrencyAdapter);
 
-
-        findPrice("BTC");
-        findPrice("ETH");
-        findPrice("RPX");
+        mCoinListRV.addItemDecoration(new DividerItemDecoration(mCoinListRV.getContext(),DividerItemDecoration.VERTICAL));
+        DefaultCoins();
 
 
     }
 
-    private void findPrice(String coin_code){
-        String url = CoinUtils.buildUrl(coin_code);
-        Log.d(TAG,"querying price for: " + coin_code + " at URL: "+ url);
+    private void DefaultCoins(){
+        String url = CoinUtils.buildUrl();
+//        Log.d(TAG,"querying price for: " + coin_code + " at URL: "+ url);
         new APICoinTask().execute(url);
     }
     class APICoinTask extends AsyncTask<String, Void, String>{
@@ -75,9 +77,9 @@ public class CurrencyDisplayActivity extends AppCompatActivity {
             if(s != null){
                 mLoadingErrorTV.setVisibility(View.INVISIBLE);
                 mCoinListRV.setVisibility(View.VISIBLE);
-                CoinUtils.CoinPrice price = CoinUtils.parseApiCallResults(s);
-                newPrice = price.USD;
-                mCurrencyAdapter.addCoin(newPrice);
+
+                ArrayList<CoinUtils.CoinModel> item = CoinUtils.parseApiCallResults(s);
+                mCurrencyAdapter.updateCoin(item);
             }else{
                 mLoadingErrorTV.setVisibility(View.VISIBLE);
                 mCoinListRV.setVisibility(View.INVISIBLE);
