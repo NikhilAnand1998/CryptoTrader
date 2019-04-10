@@ -18,7 +18,7 @@ import java.util.Arrays;
 public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.CurrencyViewHolder> {
 
 
-    private ArrayList<CoinUtils.CoinModel> items;
+    public static ArrayList<CoinUtils.CoinModel> items;
 
     public CurrencyAdapter(){
         items = new ArrayList<>();
@@ -26,12 +26,10 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
     public void updateCoin(ArrayList<CoinUtils.CoinModel> model){
         this.items = model;
         notifyDataSetChanged();
-        System.out.println("The item count is: " + getItemCount());
     }
 
     public void addCoin(CoinUtils.CoinModel model){
         items.add(model);
-        System.out.println("The item count is: " + getItemCount());
         notifyDataSetChanged();
     }
 

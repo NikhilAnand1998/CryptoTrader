@@ -3,6 +3,8 @@ package com.test.cryptotrader;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -30,7 +32,7 @@ public class CurrencyDisplayActivity extends AppCompatActivity {
         private TextView mLoadingErrorTV;
         private ProgressBar mLoadingPB;
         private ArrayList<CoinUtils.CoinModel> model = new ArrayList<>();
-
+    private static final String COIN_ARRAY_KEY = "COINLIST";
 
 
     @Override
@@ -50,7 +52,18 @@ public class CurrencyDisplayActivity extends AppCompatActivity {
         mCoinListRV.setAdapter(mCurrencyAdapter);
         mCoinListRV.setItemAnimator(new DefaultItemAnimator());
         mCoinListRV.addItemDecoration(new DividerItemDecoration(mCoinListRV.getContext(),DividerItemDecoration.VERTICAL));
-        DefaultCoins();
+
+        Intent intent = getIntent();
+        if (intent != null && intent.hasExtra(AddCoin.COIN_LIST_KEY)) {
+            System.out.println("Using the saved data from ADDCOIN screen!");
+            model = (ArrayList<CoinUtils.CoinModel>) getIntent().getSerializableExtra(AddCoin.COIN_LIST_KEY);
+           mCurrencyAdapter.updateCoin(model);
+        }else{
+            DefaultCoins();
+        }
+
+
+
 
         ItemTouchHelper.SimpleCallback itemTouchCallback = new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
@@ -75,6 +88,7 @@ public class CurrencyDisplayActivity extends AppCompatActivity {
     }
 
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.crypto_display_menu,menu);
@@ -96,6 +110,7 @@ public class CurrencyDisplayActivity extends AppCompatActivity {
         Intent intent = new Intent(this,AddCoin.class );
         startActivity(intent);
     }
+
 
     public  class APICoinTask extends AsyncTask<String, Void, String>{
 
@@ -123,6 +138,7 @@ public class CurrencyDisplayActivity extends AppCompatActivity {
                 mCoinListRV.setVisibility(View.VISIBLE);
 
                 ArrayList<CoinUtils.CoinModel> item = CoinUtils.parseApiCallResults(s);
+                model = item;
                 mCurrencyAdapter.updateCoin(item);
             }else{
                 mLoadingErrorTV.setVisibility(View.VISIBLE);

@@ -4,6 +4,7 @@ import android.net.Uri;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
@@ -16,7 +17,7 @@ public class CoinUtils {
 //    private final static String API_PAIR = "blah";
 //    private final static String FILLER_DATA = "Filler";
 
-    public static class CoinModel{
+    public static class CoinModel implements Serializable {
         public String id;
         public String name;
         public String symbol;
@@ -115,16 +116,22 @@ public class CoinUtils {
         }
     }
     public static CoinModel parseSingleApiCallResults(String json){
-        Gson gson = new Gson();
 
-        ArrayList<CoinModel> results = gson.fromJson(json, new TypeToken<ArrayList<CoinModel>>(){}.getType());
-        CoinModel item = results.get(0);
-        if(item != null ){
-            return item;
-        }
-        else{
+            Gson gson = new Gson();
+            try{
+            ArrayList<CoinModel> results = gson.fromJson(json, new TypeToken<ArrayList<CoinModel>>(){}.getType());
+            CoinModel item = results.get(0);
+            if(item != null ){
+                return item;
+            }
+            else{
+                return null;
+            }
+        }catch (Exception exception){
+            System.out.println("Returning null because we caught an error");
             return null;
         }
+
     }
 
 }
